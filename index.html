@@ -1,76 +1,91 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Jadwal Piket</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jadwal Team</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-  <div class="container">
-    <h1 class="mt-5">Jadwal Piket</h1>
-    <div class="row">
-      <div class="col-md-6">
-        <div class="card mt-4">
-          <div class="card-body">
-            <h5 class="card-title">Piket Hari Ini</h5>
-            <p class="card-text" id="piketHariIni"></p>
-          </div>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        Jadwal Hari Ini
+                    </div>
+                    <div class="card-body">
+                        <div id="jadwal-today">
+                            <!-- Jadwal untuk hari ini akan ditampilkan di sini menggunakan JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        Jadwal Besok
+                    </div>
+                    <div class="card-body">
+                        <div id="jadwal-tomorrow">
+                            <!-- Jadwal untuk besok akan ditampilkan di sini menggunakan JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        Jadwal Hari Lusa
+                    </div>
+                    <div class="card-body">
+                        <div id="jadwal-dayaftertomorrow">
+                            <!-- Jadwal untuk hari lusa akan ditampilkan di sini menggunakan JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="col-md-6">
-        <div class="card mt-4">
-          <div class="card-body">
-            <h5 class="card-title">Piket Hari Lusa</h5>
-            <p class="card-text" id="piketHariLusa"></p>
-          </div>
-        </div>
-      </div>
     </div>
-  </div>
 
-  <script>
-    const teams = [
-      ["Nauli", "Ega", "Ridho", "Siti"],
-      ["Catur", "Tri", "Tyas", "Andre"],
-      ["Munada", "Anton", "Ismail"]
-    ];
+    <script>
+        // Data jadwal
+        const jadwal = [
+            { team: "Team 1", anggota: ["Catur", "Tri", "Tyas", "Andre"] },
+            { team: "Team 2", anggota: ["Nauli", "Ega", "Ridho", "Siti"] },
+            { team: "Team 3", anggota: ["Munada", "Ismail", "Anton"] }
+        ];
 
-    const days = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
-
-    const piketHariIni = document.getElementById("piketHariIni");
-    const piketHariLusa = document.getElementById("piketHariLusa");
-
-    // Tanggal hari ini
+        // Fungsi untuk menampilkan jadwal berdasarkan urutan tim
+        function tampilkanJadwal(targetElement, dayOffset) {
     const today = new Date();
+    today.setDate(today.getDate() + dayOffset); // Set the date based on the offset
 
-    // Tanggal satu tahun dari sekarang
-    const oneYearFromNow = new Date(today);
-    oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() + 1);
+    // Calculate the team index, ensuring it doesn't exceed the number of teams
+    const timIndex = (today.getDay() - 1 + jadwal.length) % jadwal.length;
+    const jadwalHariIni = jadwal[timIndex];
 
-    // Menginisialisasi tanggal awal
-    let currentDate = today;
 
-    while (currentDate < oneYearFromNow) {
-      const dayIndex = currentDate.getDay();
-      const teamIndex = Math.floor(dayIndex / 2);
-      
-      const today = days[dayIndex];
-      const tomorrow = days[(dayIndex + 1) % 7];
-      
-      const teamToday = teams[teamIndex];
-      const teamTomorrow = teams[(teamIndex + 1) % 3];
-      
-      piketHariIni.innerHTML += `<strong>${currentDate.toDateString()}: ${today}:</strong> ${teamToday.join(", ")}<br>`;
-      piketHariLusa.innerHTML += `<strong>${currentDate.toDateString()}: ${tomorrow}:</strong> ${teamTomorrow.join(", ")}<br>`;
-      
-      // Menambah satu hari ke tanggal
-      currentDate.setDate(currentDate.getDate() + 1);
-    }
-  </script>
+            const jadwalHTML = `
+                <h5>Team: ${jadwalHariIni.team}</h5>
+                <p>Nama Anggota: ${jadwalHariIni.anggota.join(", ")}</p>
+                <p>Tanggal: ${today.toLocaleDateString()}</p>
+                <p>Kegiatan: Bersih posko lt1-lt2, halaman, dan memasak</p>
+                <p>Jam:
+                    Pagi 06.00 - 07.00<br>
+                    Siang 12.00 - 13.00<br>
+                    Malam 19.00 - 20.00
+                </p>
+                <p>NB: Jam sewaktu-waktu berubah tergantung dalam kegiatan proker</p>
+            `;
 
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+            document.getElementById(targetElement).innerHTML = jadwalHTML;
+        }
+
+        // Memanggil fungsi untuk menampilkan jadwal hari ini, besok, dan hari lusa saat halaman dimuat
+        tampilkanJadwal("jadwal-today", 0);
+        tampilkanJadwal("jadwal-tomorrow", 1);
+        tampilkanJadwal("jadwal-dayaftertomorrow", 2);
+    </script>
 </body>
 </html>
