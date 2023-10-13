@@ -4,50 +4,73 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jadwal Piket</title>
-    <!-- Sertakan CSS Bootstrap di sini -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Sertakan Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
     <div class="container">
         <h1>Jadwal Piket</h1>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Tanggal</th>
-                    <th>Shift</th>
-                    <th>Anggota Tim</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                // Simpan data tim Anda di sini
-                $teams = [
-                    1 => ['Catur', 'Tri', 'Tyas', 'Andre'],
-                    2 => ['Nauli', 'Ega', 'Ridho', 'Siti'],
-                    3 => ['Munada', 'Ismail', 'Anton']
-                ];
+        <?php
+            $team1 = ["Nauli", "Ega", "Ridho", "Siti"];
+            $team2 = ["Catur", "Tri", "Tyas", "Andre"];
+            $team3 = ["Munada", "Anton", "Ismail"];
 
-                // Tanggal awal
-                $startDate = strtotime('2023-09-02');
-                $endDate = strtotime('+30 days', $startDate); // Ganti 30 dengan jumlah hari yang Anda butuhkan
+            $days = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
+            $currentDay = date("l"); // Hari saat ini
 
-                $teamIndex = 1;
+            echo '<div class="row">';
+            // Card pertama untuk jadwal piket hari ini
+            echo '<div class="col-md-6">';
+            echo '<div class="card">';
+            echo '<div class="card-body">';
+            echo '<h5 class="card-title">Piket Hari Ini</h5>';
+            echo '<p class="card-text">';
 
-                for ($currentDate = $startDate; $currentDate <= $endDate; $currentDate = strtotime('+1 day', $currentDate)) {
-                    $date = date('d/m/Y', $currentDate);
-                    $shift = ($teamIndex % 3) + 1; // Bergantian antara shift 1, 2, dan 3
-                    $teamMembers = implode(', ', $teams[$teamIndex]);
-                    echo "<tr><td>$date</td><td>Shift $shift</td><td>$teamMembers</td></tr>";
+            // Hitung tim yang bertugas hari ini
+            if ($currentDay == "Senin" || $currentDay == "Kamis" || $currentDay == "Minggu") {
+                $todayTeam = $team1;
+            } elseif ($currentDay == "Selasa" || $currentDay == "Jumat") {
+                $todayTeam = $team2;
+            } else {
+                $todayTeam = $team3;
+            }
 
-                    // Pindah ke tim berikutnya
-                    $teamIndex = ($teamIndex % 3) + 1;
-                }
-                ?>
-            </tbody>
-        </table>
+            echo "Hari $currentDay: " . implode(", ", $todayTeam);
+            echo '</p>';
+            echo '</div>';
+            echo '</div>';
+            echo '</div>';
+
+            // Card kedua untuk jadwal piket hari lusa
+            $nextDayIndex = (array_search($currentDay, $days) + 2) % 7;
+            $nextDay = $days[$nextDayIndex];
+
+            echo '<div class="col-md-6">';
+            echo '<div class="card">';
+            echo '<div class="card-body">';
+            echo '<h5 class="card-title">Piket Hari Lusa</h5>';
+            echo '<p class="card-text">';
+
+            // Hitung tim yang bertugas hari lusa
+            if ($nextDay == "Senin" || $nextDay == "Kamis" || $nextDay == "Minggu") {
+                $nextTeam = $team1;
+            } elseif ($nextDay == "Selasa" || $nextDay == "Jumat") {
+                $nextTeam = $team2;
+            } else {
+                $nextTeam = $team3;
+            }
+
+            echo "Hari $nextDay: " . implode(", ", $nextTeam);
+            echo '</p>';
+            echo '</div>';
+            echo '</div>';
+            echo '</div>';
+            echo '</div>';
+        ?>
     </div>
 
-    <!-- Sertakan script JavaScript Bootstrap di sini (jika diperlukan) -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Sertakan Bootstrap JS dan jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
